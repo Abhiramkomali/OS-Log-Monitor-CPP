@@ -1,0 +1,13 @@
+[2023-10-27 10:00:01] INFO System started successfully
+[2023-10-27 10:05:22] INFO Successful login for user admin
+[2023-10-27 10:12:45] WARNING Failed login attempt for user john_doe
+[2023-10-27 10:13:10] WARNING Failed login attempt for user john_doe
+[2023-10-27 10:13:55] WARNING Failed login attempt for user john_doe
+[2023-10-27 10:15:00] ERROR Database connection lost
+[2023-10-27 10:15:05] ERROR Failed to write to disk
+[2023-10-27 10:16:20] INFO Database connection restored
+[2023-10-27 10:20:11] ERROR Network timeout on API call
+[2023-10-27 10:25:33] ERROR Memory usage high
+[2023-10-27 10:30:00] ERROR Service crashed unexpectedly
+[2023-10-27 10:35:12] INFO Service restarted successfully
+[2023-10-27 10:40:00] WARNING Failed login attempt for user guest
