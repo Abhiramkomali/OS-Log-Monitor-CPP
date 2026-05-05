@@ -2,7 +2,13 @@
 #include <vector>
 #include <string>
 #include <fstream>
-#include <windows.h> // For Sleep() on Windows
+#ifdef _WIN32
+#include <windows.h>
+#define SLEEP_MS(ms) Sleep(ms)
+#else
+#include <unistd.h>
+#define SLEEP_MS(ms) usleep((ms) * 1000)
+#endif
 #include "parser.h"
 #include "detector.h"
 
@@ -79,7 +85,7 @@ int main() {
             } else {
                 // If EOF reached, clear the error state and wait before checking again
                 file.clear();
-                Sleep(500);
+                SLEEP_MS(500);
             }
         }
     }
