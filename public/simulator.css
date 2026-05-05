@@ -1,0 +1,102 @@
+:root {
+  --bg-color: #f8fafc;
+  --card-bg: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --primary: #3b82f6;
+  --border: #e2e8f0;
+  --error-bg: #fef2f2;
+  --error-text: #ef4444;
+  --success-bg: #f0fdf4;
+  --success-text: #10b981;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: var(--bg-color); color: var(--text-main); display: flex; flex-direction: column; min-height: 100vh; }
+
+.presentation-nav {
+  background: #1e293b;
+  color: white;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 14px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.nav-btn {
+  color: #cbd5e1;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.nav-btn.active { background: var(--primary); color: white; }
+.nav-btn:hover:not(.active) { background: rgba(255,255,255,0.1); }
+.nav-btn svg { width: 16px; height: 16px; }
+
+.login-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.login-card {
+  background: var(--card-bg);
+  width: 100%;
+  max-width: 400px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+  padding: 40px;
+  border: 1px solid var(--border);
+  margin-bottom: 24px;
+}
+
+.login-header { text-align: center; margin-bottom: 32px; }
+.logo { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 24px; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+.login-header p { color: var(--text-muted); font-size: 14px; }
+
+.input-group { margin-bottom: 20px; }
+.input-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--text-main); }
+.input-wrapper { position: relative; }
+.input-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); width: 18px; height: 18px; }
+.input-wrapper input { width: 100%; padding: 12px 12px 12px 40px; border: 1px solid var(--border); border-radius: 8px; font-size: 15px; outline: none; transition: border-color 0.2s; font-family: inherit; }
+.input-wrapper input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+
+.btn-primary { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.2s; font-family: inherit; }
+.btn-primary:hover { background: #2563eb; }
+.btn-primary:disabled { opacity: 0.7; cursor: not-allowed; }
+
+.message { padding: 12px; border-radius: 8px; font-size: 14px; margin-bottom: 16px; display: none; }
+.message.error { background: var(--error-bg); color: var(--error-text); border: 1px solid rgba(239, 68, 68, 0.2); display: block; }
+.message.success { background: var(--success-bg); color: var(--success-text); border: 1px solid rgba(16, 185, 129, 0.2); display: block; }
+.message.hidden { display: none; }
+
+/* Dev Panel */
+.dev-panel {
+  width: 100%;
+  max-width: 400px;
+  background: #1e293b;
+  color: white;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px dashed rgba(255,255,255,0.2);
+}
+
+.dev-panel h3 { font-size: 15px; margin-bottom: 8px; color: #94a3b8; }
+.dev-panel p { font-size: 13px; color: #64748b; margin-bottom: 16px; }
+
+.dev-actions { display: flex; gap: 12px; }
+.btn-dev { flex: 1; padding: 10px; border: none; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; color: white; font-family: inherit; }
+.btn-danger { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+.btn-danger:hover { background: rgba(239, 68, 68, 0.4); }
+.btn-warning { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+.btn-warning:hover { background: rgba(245, 158, 11, 0.4); }

@@ -1,0 +1,52 @@
+{
+  "anomalies": [
+    {
+      "type": "Security Alert",
+      "message": "Multiple failed login attempts (3) detected for user: admin",
+      "timestamp": "2026-05-05 13:45:53"
+    }
+  ],
+  "logs": [
+    {
+      "timestamp": "2026-05-05 13:40:01",
+      "level": "INFO",
+      "message": "System started successfully"
+    },
+    {
+      "timestamp": "2026-05-05 13:45:43",
+      "level": "WARNING",
+      "message": "Failed login attempt for user admin"
+    },
+    {
+      "timestamp": "2026-05-05 13:45:49",
+      "level": "WARNING",
+      "message": "Failed login attempt for user admin"
+    },
+    {
+      "timestamp": "2026-05-05 13:45:53",
+      "level": "WARNING",
+      "message": "Failed login attempt for user admin"
+    },
+    {
+      "timestamp": "2026-05-05 13:45:54",
+      "level": "ERROR",
+      "message": "Database connection lost"
+    },
+    {
+      "timestamp": "2026-05-05 13:45:54",
+      "level": "ERROR",
+      "message": "Failed to write to disk"
+    },
+    {
+      "timestamp": "2026-05-05 13:45:58",
+      "level": "ERROR",
+      "message": "Memory usage high"
+    },
+    {
+      "timestamp": "2026-05-05 13:45:58",
+      "level": "ERROR",
+      "message": "Service crashed unexpectedly"
+    }
+  ],
+  "errorCount": 4
+}

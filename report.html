@@ -22,32 +22,23 @@ th { background-color: #2c3e50; color: white; }
 <div class='container'>
 <h1>🛡️ System Log & Anomaly Dashboard</h1>
 <div class='card'>
-<h2>📥 1. Raw Input Logs</h2>
-<p>This is the raw data being fed into the C++ program:</p>
-<pre style='background: #1e1e1e; color: #00ff00; padding: 15px; border-radius: 5px; overflow-x: auto; font-family: monospace;'>[2023-10-27 10:00:01] INFO System started successfully
-[2023-10-27 10:05:22] INFO Successful login for user admin
-[2023-10-27 10:12:45] WARNING Failed login attempt for user john_doe
-[2023-10-27 10:13:10] WARNING Failed login attempt for user john_doe
-[2023-10-27 10:13:55] WARNING Failed login attempt for user john_doe
-[2023-10-27 10:15:00] ERROR Database connection lost
-[2023-10-27 10:15:05] ERROR Failed to write to disk
-[2023-10-27 10:16:20] INFO Database connection restored
-[2023-10-27 10:20:11] ERROR Network timeout on API call
-[2023-10-27 10:25:33] ERROR Memory usage high
-[2023-10-27 10:30:00] ERROR Service crashed unexpectedly
-[2023-10-27 10:35:12] INFO Service restarted successfully
-[2023-10-27 10:40:00] WARNING Failed login attempt for user guest
+<h2>📥 1. Raw Input Logs (logs/sample.log)</h2>
+<p>This is the raw data being monitored:</p>
+<pre style='background: #1e1e1e; color: #00ff00; padding: 15px; border-radius: 5px; overflow-x: auto; font-family: monospace;'>[2026-05-05 13:40:01] INFO System started successfully
+[2026-05-05 13:45:43] WARNING Failed login attempt for user admin
+[2026-05-05 13:45:49] WARNING Failed login attempt for user admin
+[2026-05-05 13:45:53] WARNING Failed login attempt for user admin
+[2026-05-05 13:45:54] ERROR Database connection lost
+[2026-05-05 13:45:54] ERROR Failed to write to disk
+[2026-05-05 13:45:58] ERROR Memory usage high
+[2026-05-05 13:45:58] ERROR Service crashed unexpectedly
 </pre>
 </div>
 <div class='card'>
 <h2>🚨 2. Detected Anomalies (Output)</h2>
 <div class='alert'>
-<div class='alert-title'>[Security Alert] at 2023-10-27 10:13:55</div>
-<div>Multiple failed login attempts (3) detected for user: john_doe</div>
-</div>
-<div class='alert'>
-<div class='alert-title'>[System Health] at 2023-10-27 10:30:00</div>
-<div>High error rate detected! 5 errors logged.</div>
+<div class='alert-title'>[Security Alert] at 2026-05-05 13:45:53</div>
+<div>Multiple failed login attempts (3) detected for user: admin</div>
 </div>
 </div>
 <div class='card'>
@@ -56,69 +47,44 @@ th { background-color: #2c3e50; color: white; }
 <table>
 <tr><th>Timestamp</th><th>Level</th><th>Message</th></tr>
 <tr>
-<td>2023-10-27 10:00:01</td>
+<td>2026-05-05 13:40:01</td>
 <td class='level-INFO'>INFO</td>
 <td>System started successfully</td>
 </tr>
 <tr>
-<td>2023-10-27 10:05:22</td>
-<td class='level-INFO'>INFO</td>
-<td>Successful login for user admin</td>
-</tr>
-<tr>
-<td>2023-10-27 10:12:45</td>
+<td>2026-05-05 13:45:43</td>
 <td class='level-WARNING'>WARNING</td>
-<td>Failed login attempt for user john_doe</td>
+<td>Failed login attempt for user admin</td>
 </tr>
 <tr>
-<td>2023-10-27 10:13:10</td>
+<td>2026-05-05 13:45:49</td>
 <td class='level-WARNING'>WARNING</td>
-<td>Failed login attempt for user john_doe</td>
+<td>Failed login attempt for user admin</td>
 </tr>
 <tr>
-<td>2023-10-27 10:13:55</td>
+<td>2026-05-05 13:45:53</td>
 <td class='level-WARNING'>WARNING</td>
-<td>Failed login attempt for user john_doe</td>
+<td>Failed login attempt for user admin</td>
 </tr>
 <tr>
-<td>2023-10-27 10:15:00</td>
+<td>2026-05-05 13:45:54</td>
 <td class='level-ERROR'>ERROR</td>
 <td>Database connection lost</td>
 </tr>
 <tr>
-<td>2023-10-27 10:15:05</td>
+<td>2026-05-05 13:45:54</td>
 <td class='level-ERROR'>ERROR</td>
 <td>Failed to write to disk</td>
 </tr>
 <tr>
-<td>2023-10-27 10:16:20</td>
-<td class='level-INFO'>INFO</td>
-<td>Database connection restored</td>
-</tr>
-<tr>
-<td>2023-10-27 10:20:11</td>
-<td class='level-ERROR'>ERROR</td>
-<td>Network timeout on API call</td>
-</tr>
-<tr>
-<td>2023-10-27 10:25:33</td>
+<td>2026-05-05 13:45:58</td>
 <td class='level-ERROR'>ERROR</td>
 <td>Memory usage high</td>
 </tr>
 <tr>
-<td>2023-10-27 10:30:00</td>
+<td>2026-05-05 13:45:58</td>
 <td class='level-ERROR'>ERROR</td>
 <td>Service crashed unexpectedly</td>
-</tr>
-<tr>
-<td>2023-10-27 10:35:12</td>
-<td class='level-INFO'>INFO</td>
-<td>Service restarted successfully</td>
-</tr>
-<tr>
-<td>2023-10-27 10:40:00</td>
-<td class='level-WARNING'>WARNING</td>
-<td>Failed login attempt for user guest</td>
 </tr>
 </table>
 </div>

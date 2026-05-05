@@ -16,8 +16,7 @@ public:
     // Reads the log file and parses each line into a LogEntry
     static std::vector<LogEntry> parseFile(const std::string& filepath);
 
-private:
-    // Helper function to parse a single line
+    // Parses a single line (useful for real-time monitoring)
     static LogEntry parseLine(const std::string& line);
 };
 

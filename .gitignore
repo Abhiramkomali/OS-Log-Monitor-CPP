@@ -6,3 +6,7 @@ monitor.exe
 
 # Ignore OS files
 .DS_Store
+
+# Node.js
+node_modules/
+.env

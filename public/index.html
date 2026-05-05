@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexus | Company Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="simulator.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  
+  <!-- System Navigation -->
+  <div style="width: 100%; background: #0f172a; color: white; padding: 12px 24px; display: flex; align-items: center; gap: 16px; font-size: 14px; border-bottom: 1px solid #1e293b;">
+    <a href="index.html" style="background: #3b82f6; color: white; text-decoration: none; display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 6px; transition: all 0.2s;"><i data-lucide="layout-template" style="width:16px; height:16px;"></i> Client Login Portal</a>
+    <a href="dashboard.html" style="color: #cbd5e1; text-decoration: none; display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 6px; transition: all 0.2s;"><i data-lucide="shield-alert" style="width:16px; height:16px;"></i> Admin Dashboard</a>
+  </div>
+
+  <div class="login-container">
+    <div class="login-card">
+      <div class="login-header">
+        <div class="logo">
+          <i data-lucide="hexagon" class="logo-icon"></i>
+          <span>Nexus Portal</span>
+        </div>
+        <p>Enter your credentials to access the system.</p>
+      </div>
+
+      <form id="login-form">
+        <div class="input-group">
+          <label>Username</label>
+          <div class="input-wrapper">
+            <i data-lucide="user" class="input-icon"></i>
+            <input type="text" id="username" placeholder="e.g. admin" required>
+          </div>
+        </div>
+        <div class="input-group">
+          <label>Password</label>
+          <div class="input-wrapper">
+            <i data-lucide="lock" class="input-icon"></i>
+            <input type="password" id="password" placeholder="••••••••" required>
+          </div>
+        </div>
+        
+        <div id="login-message" class="message hidden"></div>
+
+        <button type="submit" class="btn-primary" id="login-btn">Sign In</button>
+      </form>
+    </div>
+
+    <!-- Diagnostic Panel for Stress Testing -->
+    <div class="dev-panel">
+      <h3>System Diagnostic Tools</h3>
+      <p>Administrative tools for stress-testing server stability.</p>
+      <div class="dev-actions">
+        <button id="btn-crash" class="btn-dev btn-danger"><i data-lucide="database"></i> Inject DB Fault</button>
+        <button id="btn-leak" class="btn-dev btn-warning"><i data-lucide="cpu"></i> Inject Memory Leak</button>
+      </div>
+      <div id="dev-message" class="message hidden"></div>
+    </div>
+  </div>
+
+  <script src="simulator.js"></script>
+</body>
+</html>

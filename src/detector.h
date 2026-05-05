@@ -5,6 +5,8 @@
 #include <string>
 #include "parser.h"
 
+#include <map>
+
 // Structure to hold data about a detected anomaly
 struct Anomaly {
     std::string type;
@@ -14,19 +16,35 @@ struct Anomaly {
 
 class Detector {
 public:
-    // Analyze logs and detect anomalies based on rules
-    static void analyze(const std::vector<LogEntry>& logs);
+    // Constructor takes the path of the log file being monitored
+    Detector(const std::string& logFilePath);
+
+    // Batch analysis (for existing Mode 1 & 2)
+    void analyze(const std::vector<LogEntry>& logs);
+
+    // Real-time analysis of a single line (for Mode 3)
+    void analyzeLine(const LogEntry& entry, bool generateReport = true);
 
 private:
     static const int MAX_FAILED_LOGINS = 3; // Threshold for failed logins
     static const int MAX_ERROR_COUNT = 5;   // Threshold for ERROR logs
 
+    // Stateful variables to remember history
+    std::string currentLogFile;
+    std::map<std::string, int> failedAttempts;
+    int errorCount;
+    std::vector<Anomaly> anomalies;
+    std::vector<LogEntry> parsedHistory;
+
     // Helper functions for specific anomaly checks
-    static void checkFailedLogins(const std::vector<LogEntry>& logs, std::vector<Anomaly>& anomalies);
-    static void checkErrorRates(const std::vector<LogEntry>& logs, std::vector<Anomaly>& anomalies);
+    void checkFailedLogin(const LogEntry& entry);
+    void checkErrorRate(const LogEntry& entry);
     
     // Automatically generates an HTML Webpage Dashboard
-    static void generateHtmlReport(const std::vector<LogEntry>& logs, const std::vector<Anomaly>& anomalies);
+    void generateHtmlReport();
+    
+    // Automatically generates a JSON file for the Node.js backend
+    void generateJsonReport();
 };
 
 #endif // DETECTOR_H

@@ -10,66 +10,71 @@ const std::string RED = "\033[31m";
 const std::string YELLOW = "\033[33m";
 const std::string CYAN = "\033[36m";
 
+Detector::Detector(const std::string& logFilePath) : currentLogFile(logFilePath), errorCount(0) {}
+
 void Detector::analyze(const std::vector<LogEntry>& logs) {
     std::cout << CYAN << "\n--- Starting Anomaly Detection ---" << RESET << "\n";
     
-    std::vector<Anomaly> anomalies;
+    for (const auto& entry : logs) {
+        analyzeLine(entry, false); // false so we don't generate report on every single line in batch mode
+    }
     
-    checkFailedLogins(logs, anomalies);
-    checkErrorRates(logs, anomalies);
-    
-    // Automatically generate the HTML Dashboard
-    generateHtmlReport(logs, anomalies);
+    // Automatically generate the HTML Dashboard at the end
+    generateHtmlReport();
+    generateJsonReport();
     
     std::cout << CYAN << "--- Analysis Complete ---\n" << RESET << "\n";
+    std::cout << "Total ERROR logs found: " << errorCount << "\n";
     std::cout << "Dashboard generated successfully at: " << YELLOW << "report.html" << RESET << "\n";
 }
 
-void Detector::checkFailedLogins(const std::vector<LogEntry>& logs, std::vector<Anomaly>& anomalies) {
-    std::map<std::string, int> failedAttempts;
+void Detector::analyzeLine(const LogEntry& entry, bool generateReport) {
+    parsedHistory.push_back(entry);
     
-    for (const auto& entry : logs) {
-        if (entry.level == "WARNING" && entry.message.find("Failed login") != std::string::npos) {
-            size_t pos = entry.message.find("user ");
-            if (pos != std::string::npos) {
-                std::string username = entry.message.substr(pos + 5);
-                failedAttempts[username]++;
-                
-                if (failedAttempts[username] == MAX_FAILED_LOGINS) {
-                    std::string msg = "Multiple failed login attempts (" + std::to_string(MAX_FAILED_LOGINS) + ") detected for user: " + username;
-                    std::cout << RED << "[ALERT] " << msg << " at " << entry.timestamp << RESET << "\n";
-                    anomalies.push_back({"Security Alert", msg, entry.timestamp});
-                }
-            }
-        } else if (entry.level == "INFO" && entry.message.find("Successful login") != std::string::npos) {
-            size_t pos = entry.message.find("user ");
-            if (pos != std::string::npos) {
-                std::string username = entry.message.substr(pos + 5);
-                failedAttempts[username] = 0; 
-            }
-        }
+    checkFailedLogin(entry);
+    checkErrorRate(entry);
+    
+    if (generateReport) {
+        generateHtmlReport();
+        generateJsonReport();
     }
 }
 
-void Detector::checkErrorRates(const std::vector<LogEntry>& logs, std::vector<Anomaly>& anomalies) {
-    int errorCount = 0;
-    
-    for (const auto& entry : logs) {
-        if (entry.level == "ERROR") {
-            errorCount++;
+void Detector::checkFailedLogin(const LogEntry& entry) {
+    if (entry.level == "WARNING" && entry.message.find("Failed login") != std::string::npos) {
+        size_t pos = entry.message.find("user ");
+        if (pos != std::string::npos) {
+            std::string username = entry.message.substr(pos + 5);
+            failedAttempts[username]++;
             
-            if (errorCount == MAX_ERROR_COUNT) {
-                std::string msg = "High error rate detected! " + std::to_string(MAX_ERROR_COUNT) + " errors logged.";
-                std::cout << YELLOW << "[ALERT] " << msg << " up to " << entry.timestamp << RESET << "\n";
-                anomalies.push_back({"System Health", msg, entry.timestamp});
+            if (failedAttempts[username] == MAX_FAILED_LOGINS) {
+                std::string msg = "Multiple failed login attempts (" + std::to_string(MAX_FAILED_LOGINS) + ") detected for user: " + username;
+                std::cout << RED << "[ALERT] " << msg << " at " << entry.timestamp << RESET << "\n";
+                anomalies.push_back({"Security Alert", msg, entry.timestamp});
             }
         }
+    } else if (entry.level == "INFO" && entry.message.find("Successful login") != std::string::npos) {
+        size_t pos = entry.message.find("user ");
+        if (pos != std::string::npos) {
+            std::string username = entry.message.substr(pos + 5);
+            failedAttempts[username] = 0; 
+        }
     }
-    
-    std::cout << "Total ERROR logs found: " << errorCount << "\n";
 }
 
-void Detector::generateHtmlReport(const std::vector<LogEntry>& logs, const std::vector<Anomaly>& anomalies) {
+void Detector::checkErrorRate(const LogEntry& entry) {
+    if (entry.level == "ERROR") {
+        errorCount++;
+        
+        if (errorCount == MAX_ERROR_COUNT) {
+            std::string msg = "High error rate detected! " + std::to_string(MAX_ERROR_COUNT) + " errors logged.";
+            std::cout << YELLOW << "[ALERT] " << msg << " up to " << entry.timestamp << RESET << "\n";
+            anomalies.push_back({"System Health", msg, entry.timestamp});
+        }
+    }
+}
+
+void Detector::generateHtmlReport() {
     std::ofstream htmlFile("report.html");
     if (!htmlFile.is_open()) {
         std::cerr << "Error: Could not create report.html\n";
@@ -97,19 +102,19 @@ void Detector::generateHtmlReport(const std::vector<LogEntry>& logs, const std::
     htmlFile << "<div class='container'>\n";
     htmlFile << "<h1>🛡️ System Log & Anomaly Dashboard</h1>\n";
     
-    // Read raw input
-    std::ifstream rawFile("logs/sample.log");
+    // Read raw input using the correct currentLogFile variable
+    std::ifstream rawFile(currentLogFile);
     std::string rawInput;
     if (rawFile.is_open()) {
         rawInput.assign((std::istreambuf_iterator<char>(rawFile)), std::istreambuf_iterator<char>());
     } else {
-        rawInput = "Could not load raw log file.";
+        rawInput = "Could not load raw log file: " + currentLogFile;
     }
 
     // Input Section
     htmlFile << "<div class='card'>\n";
-    htmlFile << "<h2>📥 1. Raw Input Logs</h2>\n";
-    htmlFile << "<p>This is the raw data being fed into the C++ program:</p>\n";
+    htmlFile << "<h2>📥 1. Raw Input Logs (" << currentLogFile << ")</h2>\n";
+    htmlFile << "<p>This is the raw data being monitored:</p>\n";
     htmlFile << "<pre style='background: #1e1e1e; color: #00ff00; padding: 15px; border-radius: 5px; overflow-x: auto; font-family: monospace;'>" << rawInput << "</pre>\n";
     htmlFile << "</div>\n";
     
@@ -134,7 +139,7 @@ void Detector::generateHtmlReport(const std::vector<LogEntry>& logs, const std::
     htmlFile << "<p>The raw text is parsed into C++ structs and analyzed line-by-line:</p>\n";
     htmlFile << "<table>\n<tr><th>Timestamp</th><th>Level</th><th>Message</th></tr>\n";
     
-    for (const auto& entry : logs) {
+    for (const auto& entry : parsedHistory) {
         htmlFile << "<tr>\n";
         htmlFile << "<td>" << entry.timestamp << "</td>\n";
         htmlFile << "<td class='level-" << entry.level << "'>" << entry.level << "</td>\n";
@@ -146,4 +151,46 @@ void Detector::generateHtmlReport(const std::vector<LogEntry>& logs, const std::
     
     htmlFile << "</div>\n</body>\n</html>\n";
     htmlFile.close();
+}
+
+void Detector::generateJsonReport() {
+    std::ofstream jsonFile("report.json");
+    if (!jsonFile.is_open()) {
+        std::cerr << "Error: Could not create report.json\n";
+        return;
+    }
+    
+    jsonFile << "{\n";
+    
+    // Anomalies
+    jsonFile << "  \"anomalies\": [\n";
+    for (size_t i = 0; i < anomalies.size(); ++i) {
+        jsonFile << "    {\n";
+        jsonFile << "      \"type\": \"" << anomalies[i].type << "\",\n";
+        // Simple escape for double quotes just in case, though message is mostly simple text.
+        std::string msg = anomalies[i].message;
+        jsonFile << "      \"message\": \"" << msg << "\",\n";
+        jsonFile << "      \"timestamp\": \"" << anomalies[i].timestamp << "\"\n";
+        jsonFile << "    }";
+        if (i < anomalies.size() - 1) jsonFile << ",";
+        jsonFile << "\n";
+    }
+    jsonFile << "  ],\n";
+    
+    // Logs Table Section
+    jsonFile << "  \"logs\": [\n";
+    for (size_t i = 0; i < parsedHistory.size(); ++i) {
+        jsonFile << "    {\n";
+        jsonFile << "      \"timestamp\": \"" << parsedHistory[i].timestamp << "\",\n";
+        jsonFile << "      \"level\": \"" << parsedHistory[i].level << "\",\n";
+        std::string msg = parsedHistory[i].message;
+        jsonFile << "      \"message\": \"" << msg << "\"\n";
+        jsonFile << "    }";
+        if (i < parsedHistory.size() - 1) jsonFile << ",";
+        jsonFile << "\n";
+    }
+    jsonFile << "  ],\n";
+    jsonFile << "  \"errorCount\": " << errorCount << "\n";
+    jsonFile << "}\n";
+    jsonFile.close();
 }
