@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: os-log-monitor
+    env: docker
+    plan: free
+    envVars:
+      - key: MONGO_URI
+        value: mongodb+srv://abhiram:123@cluster0.ncx8jkp.mongodb.net/os_log_monitor?retryWrites=true&w=majority&appName=Cluster0
+      - key: PORT
+        value: 3000
